@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>João Henrique Alves — UX Writing · Copywriting · Edtech</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0e;
+    --paper: #f5f0e8;
+    --cream: #ede8dc;
+    --rust: #c84b2f;
+    --rust-light: #e8693a;
+    --gold: #c9a84c;
+    --muted: #7a7165;
+    --white: #fdfaf5;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 4rem;
+    background: rgba(245,240,232,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(15,14,14,0.08);
+  }
+
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--rust);
+  }
+
+  .nav-links {
+    display: flex; gap: 2.5rem; list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.78rem; letter-spacing: 0.1em;
+    text-transform: uppercase; text-decoration: none;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem 4rem 6rem;
+    position: relative; z-index: 2;
+  }
+
+  .hero-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--rust);
+    margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+    opacity: 0; animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+
+  .hero-name em {
+    font-style: italic; color: var(--rust);
+  }
+
+  .hero-role {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.05rem; font-weight: 300;
+    color: var(--muted); margin-bottom: 2.5rem;
+    letter-spacing: 0.02em;
+    opacity: 0; animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+
+  .hero-desc {
+    font-size: 1rem; line-height: 1.8;
+    max-width: 440px; color: var(--ink);
+    margin-bottom: 3rem;
+    opacity: 0; animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    background: var(--rust); color: var(--white);
+    padding: 0.9rem 2rem;
+    font-size: 0.82rem; letter-spacing: 0.12em;
+    text-transform: uppercase; text-decoration: none;
+    font-family: 'Space Mono', monospace;
+    transition: background 0.2s, transform 0.2s;
+    opacity: 0; animation: fadeUp 0.8s ease 1s forwards;
+  }
+  .hero-cta:hover { background: var(--rust-light); transform: translateY(-2px); }
+  .hero-cta-arrow { font-size: 1.1rem; }
+
+  .hero-right {
+    position: relative; overflow: hidden;
+    background: var(--cream);
+    opacity: 0; animation: fadeIn 1.2s ease 0.3s forwards;
+  }
+
+  .hero-right::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--rust) 50%, var(--ink) 100%);
+    opacity: 0.12;
+  }
+
+  .hero-visual {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .hero-visual-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 12rem; font-weight: 900; font-style: italic;
+    color: var(--ink); opacity: 0.04;
+    line-height: 1; user-select: none;
+    transform: rotate(-8deg);
+  }
+
+  .hero-cards {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1rem; padding: 6rem 3rem;
+  }
+
+  .skill-pill {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    padding: 0.7rem 1.4rem;
+    background: rgba(245,240,232,0.9);
+    border: 1px solid rgba(15,14,14,0.1);
+    font-size: 0.82rem;
+    color: var(--ink);
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.05em;
+    transform: translateX(0);
+    transition: transform 0.3s;
+    backdrop-filter: blur(8px);
+  }
+
+  .skill-pill:nth-child(2) { margin-left: 3rem; }
+  .skill-pill:nth-child(3) { margin-left: -2rem; }
+  .skill-pill:hover { transform: translateX(6px); }
+
+  .skill-pill-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--rust);
+  }
+
+  /* ── SECTIONS ── */
+  section { position: relative; z-index: 1; }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--rust);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700; line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  /* ── SOBRE ── */
+  .sobre {
+    padding: 7rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 5rem;
+    align-items: start;
+    border-bottom: 1px solid rgba(15,14,14,0.08);
+  }
+
+  .sobre-right p {
+    font-size: 1.05rem; line-height: 1.85;
+    color: var(--ink); margin-bottom: 1.2rem;
+  }
+
+  .sobre-stats {
+    display: flex; gap: 3rem; margin-top: 3rem;
+  }
+
+  .stat { display: flex; flex-direction: column; gap: 0.3rem; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; font-weight: 900; color: var(--rust);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.75rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted);
+  }
+
+  /* ── PROJETOS ── */
+  .projetos {
+    padding: 7rem 4rem;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .projetos .section-label { color: var(--gold); }
+  .projetos .section-title { color: var(--white); }
+
+  .projetos-grid {
+    margin-top: 4rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: rgba(255,255,255,0.08);
+  }
+
+  .projeto-card {
+    background: #161514;
+    padding: 2.5rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    position: relative; overflow: hidden;
+  }
+
+  .projeto-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px; background: var(--rust);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .projeto-card:hover { background: #1e1c1a; }
+  .projeto-card:hover::after { transform: scaleX(1); }
+
+  .projeto-area {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 1.2rem;
+  }
+
+  .projeto-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700;
+    color: var(--white); margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .projeto-desc {
+    font-size: 0.88rem; line-height: 1.75;
+    color: rgba(245,240,232,0.6);
+    margin-bottom: 1.5rem;
+  }
+
+  .projeto-content {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem; line-height: 1.7;
+    color: rgba(245,240,232,0.8);
+    font-style: italic;
+    border-left: 2px solid var(--rust);
+  }
+
+  .projeto-tags {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+  }
+
+  .tag {
+    font-size: 0.65rem; letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    border: 1px solid rgba(245,240,232,0.15);
+    color: rgba(245,240,232,0.5);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── UX WRITING ── */
+  .ux-section {
+    padding: 7rem 4rem;
+    border-bottom: 1px solid rgba(15,14,14,0.08);
+  }
+
+  .ux-comparison {
+    margin-top: 4rem;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem; align-items: center;
+  }
+
+  .ux-box {
+    padding: 2rem;
+    border: 1px solid rgba(15,14,14,0.12);
+  }
+
+  .ux-box-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.2em;
+    text-transform: uppercase; margin-bottom: 1rem;
+  }
+
+  .ux-box.before .ux-box-label { color: #999; }
+  .ux-box.after .ux-box-label { color: var(--rust); }
+
+  .ux-box.before {
+    background: #f0ebe0;
+    border-color: rgba(15,14,14,0.06);
+    opacity: 0.7;
+  }
+
+  .ux-box.after {
+    background: var(--white);
+    border-color: var(--rust);
+  }
+
+  .ux-text {
+    font-size: 0.95rem; line-height: 1.7;
+    color: var(--ink);
+  }
+
+  .ux-arrow {
+    font-size: 1.5rem; color: var(--rust);
+    font-family: 'Space Mono', monospace;
+    text-align: center;
+  }
+
+  .ux-context {
+    font-size: 0.72rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-top: 0.8rem;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .ux-pairs { display: flex; flex-direction: column; gap: 3rem; margin-top: 4rem; }
+
+  /* ── COMPETÊNCIAS ── */
+  .competencias {
+    padding: 7rem 4rem;
+    background: var(--cream);
+  }
+
+  .comp-grid {
+    margin-top: 4rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .comp-card {
+    padding: 2.5rem;
+    background: var(--white);
+    border: 1px solid rgba(15,14,14,0.07);
+    position: relative;
+  }
+
+  .comp-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; background: var(--rust);
+  }
+
+  .comp-icon {
+    font-size: 2rem; margin-bottom: 1.2rem;
+  }
+
+  .comp-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 700;
+    margin-bottom: 0.8rem;
+  }
+
+  .comp-list {
+    list-style: none; display: flex; flex-direction: column; gap: 0.5rem;
+  }
+
+  .comp-list li {
+    font-size: 0.85rem; color: var(--muted);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+
+  .comp-list li::before {
+    content: '→'; color: var(--rust); font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+  }
+
+  /* ── CONTATO ── */
+  .contato {
+    padding: 7rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center;
+  }
+
+  .contato-left p {
+    font-size: 1rem; line-height: 1.8;
+    color: var(--muted); margin-bottom: 2rem;
+  }
+
+  .contato-links {
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+
+  .contato-link {
+    display: flex; align-items: center; gap: 1rem;
+    text-decoration: none; color: var(--ink);
+    font-size: 0.9rem; padding: 1rem 1.2rem;
+    border: 1px solid rgba(15,14,14,0.1);
+    transition: border-color 0.2s, transform 0.2s;
+    background: var(--white);
+  }
+
+  .contato-link:hover {
+    border-color: var(--rust);
+    transform: translateX(6px);
+  }
+
+  .contato-link-icon {
+    font-size: 1.2rem; width: 2rem; text-align: center;
+  }
+
+  .contato-right {
+    background: var(--ink); color: var(--white);
+    padding: 3rem;
+  }
+
+  .contato-right .section-label { color: var(--gold); }
+  .contato-right .section-title { color: var(--white); font-size: 1.8rem; }
+
+  .disponivel {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-top: 2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(245,240,232,0.6);
+  }
+
+  .dot-green {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 8px #4ade80;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem 4rem;
+    border-top: 1px solid rgba(15,14,14,0.08);
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--paper);
+  }
+
+  footer p {
+    font-size: 0.75rem; color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1; transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 2rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 7rem 2rem 4rem; }
+    .sobre { grid-template-columns: 1fr; gap: 2rem; padding: 4rem 2rem; }
+    .projetos { padding: 4rem 2rem; }
+    .projetos-grid { grid-template-columns: 1fr; }
+    .ux-section { padding: 4rem 2rem; }
+    .ux-comparison { grid-template-columns: 1fr; }
+    .ux-arrow { transform: rotate(90deg); }
+    .comp-grid { grid-template-columns: 1fr; }
+    .competencias { padding: 4rem 2rem; }
+    .contato { grid-template-columns: 1fr; padding: 4rem 2rem; gap: 3rem; }
+    footer { padding: 1.5rem 2rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">◈ João Henrique</div>
+  <ul class="nav-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#projetos">Projetos</a></li>
+    <li><a href="#uxwriting">UX Writing</a></li>
+    <li><a href="#competencias">Competências</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-tag">◈ Disponível para projetos</p>
+    <h1 class="hero-name">João<br><em>Henrique.</em></h1>
+    <p class="hero-role">UX Writing · Copywriting · Conteúdo Educacional</p>
+    <p class="hero-desc">
+      Pedagogo formado pela UNIFG e estudante de Letras (Português e Espanhol) na UFRPE. 
+      Transformo linguagem em experiência — seja num app, numa campanha ou numa aula.
+    </p>
+    <a href="#projetos" class="hero-cta">Ver projetos <span class="hero-cta-arrow">↓</span></a>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="hero-visual-text">W</div>
+    </div>
+    <div class="hero-cards">
+      <div class="skill-pill"><span class="skill-pill-dot"></span> UX Writing</div>
+      <div class="skill-pill"><span class="skill-pill-dot"></span> Copywriting</div>
+      <div class="skill-pill"><span class="skill-pill-dot"></span> Conteúdo Educacional</div>
+      <div class="skill-pill"><span class="skill-pill-dot"></span> Social Media</div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section class="sobre reveal" id="sobre">
+  <div class="sobre-left">
+    <p class="section-label">◈ Sobre</p>
+    <h2 class="section-title">A linguagem<br>como<br>ferramenta.</h2>
+  </div>
+  <div class="sobre-right">
+    <p>
+      Sou pedagogo formado pela UNIFG e estudo Letras — Português e Espanhol — na UFRPE. 
+      Tenho experiência como Acompanhante Terapêutico na Clínica Mundos e como Auxiliar de 
+      Coordenação Pedagógica, onde desenvolvi <strong>redação técnica, análise de dados e 
+      elaboração de relatórios</strong> como parte do trabalho diário.
+    </p>
+    <p>
+      Também sou capacitado em Aplicador ABA e Protocolo VB-MAPP — o que reforça meu olhar 
+      analítico e estruturado sobre comportamento, aprendizagem e comunicação. Essa base me 
+      diferencia em qualquer projeto que envolva escrever para pessoas reais.
+    </p>
+    <p>
+      Estou em transição intencional para as áreas de UX Writing, Copywriting e Conteúdo 
+      Educacional Digital — onde linguagem, pedagogia e tecnologia se encontram.
+    </p>
+    <div class="sobre-stats">
+      <div class="stat">
+        <span class="stat-num">3</span>
+        <span class="stat-label">áreas de atuação</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">2</span>
+        <span class="stat-label">idiomas</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">∞</span>
+        <span class="stat-label">textos a escrever</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJETOS -->
+<section class="projetos reveal" id="projetos">
+  <p class="section-label">◈ Projetos</p>
+  <h2 class="section-title">Trabalhos selecionados.</h2>
+
+  <div class="projetos-grid">
+
+    <!-- Projeto 1 - Copywriting -->
+    <div class="projeto-card">
+      <p class="projeto-area">Copywriting · Campanha digital</p>
+      <h3 class="projeto-title">Campanha para app de finanças pessoais</h3>
+      <p class="projeto-desc">
+        Desenvolvimento de copy completo para campanha de aquisição de usuários — headline, tagline, 
+        textos de anúncio e CTA para redes sociais.
+      </p>
+      <div class="projeto-content">
+        <strong>Headline:</strong> "Seu dinheiro finalmente te obedece."<br><br>
+        <strong>Anúncio:</strong> Você não é ruim com dinheiro. Você só nunca teve as ferramentas certas. 
+        O Caixinha organiza seus gastos em 3 minutos e mostra exatamente onde seu salário some todo mês.
+      </div>
+      <div class="projeto-tags">
+        <span class="tag">Copywriting</span>
+        <span class="tag">Fintech</span>
+        <span class="tag">Social Ads</span>
+      </div>
+    </div>
+
+    <!-- Projeto 2 - Edtech -->
+    <div class="projeto-card">
+      <p class="projeto-area">Conteúdo Educacional · Edtech</p>
+      <h3 class="projeto-title">Sequência didática sobre leitura crítica</h3>
+      <p class="projeto-desc">
+        Desenvolvimento de conteúdo em formato de trilha de aprendizado para plataforma de ensino 
+        médio, com linguagem jovem e acessível.
+      </p>
+      <div class="projeto-content">
+        <strong>Abertura da aula:</strong> Antes de começar: você leu alguma coisa hoje — 
+        mensagem, legenda, notícia. Como você sabe se é verdade? Essa pergunta é o coração desta aula.
+      </div>
+      <div class="projeto-tags">
+        <span class="tag">Edtech</span>
+        <span class="tag">Instrucional</span>
+        <span class="tag">Linguagem</span>
+      </div>
+    </div>
+
+    <!-- Projeto 3 - Social Media -->
+    <div class="projeto-card">
+      <p class="projeto-area">Social Media · LinkedIn</p>
+      <h3 class="projeto-title">Estratégia de conteúdo para consultor educacional</h3>
+      <p class="projeto-desc">
+        Calendário editorial mensal e redação de 8 posts para LinkedIn de especialista em 
+        educação corporativa, focando em autoridade e alcance orgânico.
+      </p>
+      <div class="projeto-content">
+        <strong>Post de maior engajamento:</strong><br>
+        O maior erro na educação corporativa não é falta de orçamento.<br>
+        É ensinar o conteúdo certo do jeito errado.<br><br>
+        Aprendi isso depois de ver 3 treinamentos excelentes fracassarem por um motivo simples: 
+        ninguém perguntou ao aprendiz como ele aprende.
+      </div>
+      <div class="projeto-tags">
+        <span class="tag">LinkedIn</span>
+        <span class="tag">Thought Leadership</span>
+        <span class="tag">Editorial</span>
+      </div>
+    </div>
+
+    <!-- Projeto 4 - UX -->
+    <div class="projeto-card">
+      <p class="projeto-area">UX Writing · App de saúde</p>
+      <h3 class="projeto-title">Reescrita do onboarding do app Viva Bem</h3>
+      <p class="projeto-desc">
+        Auditoria de microtextos e reescrita completa do fluxo de cadastro, reduzindo abandono 
+        e aumentando a sensação de acolhimento no primeiro acesso.
+      </p>
+      <div class="projeto-content">
+        <strong>Erro de sistema (antes):</strong> "Cadastro não realizado. Tente novamente."<br><br>
+        <strong>Erro de sistema (depois):</strong> "Quase lá! Seu e-mail já está cadastrado. 
+        Quer entrar com ele ou usar outro?"
+      </div>
+      <div class="projeto-tags">
+        <span class="tag">UX Writing</span>
+        <span class="tag">Saúde</span>
+        <span class="tag">Onboarding</span>
+      </div>
+    </div>
+
+    <!-- Projeto 5 - Email -->
+    <div class="projeto-card">
+      <p class="projeto-area">Copywriting · E-mail Marketing</p>
+      <h3 class="projeto-title">Sequência de boas-vindas para curso online</h3>
+      <p class="projeto-desc">
+        Criação de 4 e-mails de onboarding para alunos de novo curso de escrita criativa, 
+        focando em ativação e redução de churn nos primeiros 7 dias.
+      </p>
+      <div class="projeto-content">
+        <strong>E-mail 1 — Assunto:</strong> "Você tomou a decisão certa (e eu vou te mostrar por quê)"<br><br>
+        Oi, [Nome]! Seja muito bem-vindo. A primeira coisa que quero que você saiba: 
+        escrever bem não é dom. É hábito. E você acabou de começar o seu.
+      </div>
+      <div class="projeto-tags">
+        <span class="tag">E-mail</span>
+        <span class="tag">Onboarding</span>
+        <span class="tag">Cursos</span>
+      </div>
+    </div>
+
+    <!-- Projeto 6 - Carrossel -->
+    <div class="projeto-card">
+      <p class="projeto-area">Social Media · Instagram</p>
+      <h3 class="projeto-title">Carrossel educativo sobre gramática sem chatice</h3>
+      <p class="projeto-desc">
+        Série de carrosséis sobre língua portuguesa para perfil de educação com linguagem 
+        jovem, humor sutil e alto potencial de compartilhamento.
+      </p>
+      <div class="projeto-content">
+        <strong>Slide 1:</strong> "Por que você escreve 'mau' errado há 10 anos (e ninguém te contou o truque)"<br><br>
+        <strong>Slide 2:</strong> Mau = adjetivo. Ruim. Mau humor, mau cheiro, mau caráter.<br>
+        Mal = advérbio ou substantivo. Mal-estar, dormir mal, o bem e o mal.
+      </div>
+      <div class="projeto-tags">
+        <span class="tag">Instagram</span>
+        <span class="tag">Educação</span>
+        <span class="tag">Carrossel</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- UX WRITING -->
+<section class="ux-section reveal" id="uxwriting">
+  <p class="section-label">◈ UX Writing</p>
+  <h2 class="section-title">Antes e depois.<br>O texto que orienta.</h2>
+
+  <div class="ux-pairs">
+
+    <div class="ux-comparison">
+      <div class="ux-box before">
+        <p class="ux-box-label">✕ Antes</p>
+        <p class="ux-text">Erro ao processar pagamento. Código 403. Contate o suporte.</p>
+        <p class="ux-context">Contexto: checkout de e-commerce</p>
+      </div>
+      <div class="ux-arrow">→</div>
+      <div class="ux-box after">
+        <p class="ux-box-label">✓ Depois</p>
+        <p class="ux-text">Seu pagamento não foi aprovado pelo banco. Tente outro cartão ou entre em contato com sua operadora — seu pedido continua salvo aqui.</p>
+        <p class="ux-context">Impacto: clareza + empatia + próximo passo</p>
+      </div>
+    </div>
+
+    <div class="ux-comparison">
+      <div class="ux-box before">
+        <p class="ux-box-label">✕ Antes</p>
+        <p class="ux-text">Preencha todos os campos obrigatórios antes de continuar.</p>
+        <p class="ux-context">Contexto: formulário de cadastro</p>
+      </div>
+      <div class="ux-arrow">→</div>
+      <div class="ux-box after">
+        <p class="ux-box-label">✓ Depois</p>
+        <p class="ux-text">Faltou só o seu telefone! Precisamos dele para confirmar seu cadastro por SMS.</p>
+        <p class="ux-context">Impacto: especificidade + motivação + confiança</p>
+      </div>
+    </div>
+
+    <div class="ux-comparison">
+      <div class="ux-box before">
+        <p class="ux-box-label">✕ Antes</p>
+        <p class="ux-text">Tem certeza que deseja excluir este item? Esta ação não pode ser desfeita.</p>
+        <p class="ux-context">Contexto: modal de confirmação</p>
+      </div>
+      <div class="ux-arrow">→</div>
+      <div class="ux-box after">
+        <p class="ux-box-label">✓ Depois</p>
+        <p class="ux-text">Remover "Relatório Q3"? Você não poderá recuperá-lo depois. <br><br>[Cancelar] &nbsp; [Sim, remover]</p>
+        <p class="ux-context">Impacto: contexto real + consequência clara + CTAs explícitos</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- COMPETÊNCIAS -->
+<section class="competencias reveal" id="competencias">
+  <p class="section-label">◈ Competências</p>
+  <h2 class="section-title">O que trago para<br>o seu projeto.</h2>
+
+  <div class="comp-grid">
+    <div class="comp-card">
+      <div class="comp-icon">✍️</div>
+      <h3 class="comp-title">UX Writing</h3>
+      <ul class="comp-list">
+        <li>Microtextos e interface</li>
+        <li>Fluxos de onboarding</li>
+        <li>Mensagens de erro e sucesso</li>
+        <li>Guias de tom de voz</li>
+        <li>Auditoria de conteúdo</li>
+      </ul>
+    </div>
+    <div class="comp-card">
+      <div class="comp-icon">📣</div>
+      <h3 class="comp-title">Copywriting</h3>
+      <ul class="comp-list">
+        <li>Headlines e taglines</li>
+        <li>Anúncios para redes sociais</li>
+        <li>E-mail marketing</li>
+        <li>Landing pages</li>
+        <li>Copy para vídeo e podcast</li>
+      </ul>
+    </div>
+    <div class="comp-card">
+      <div class="comp-icon">🎓</div>
+      <h3 class="comp-title">Conteúdo Educacional</h3>
+      <ul class="comp-list">
+        <li>Roteiros de aula e curso</li>
+        <li>Sequências didáticas</li>
+        <li>Carrosséis educativos</li>
+        <li>Materiais de apoio</li>
+        <li>Design instrucional</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section class="contato reveal" id="contato">
+  <div class="contato-left">
+    <p class="section-label">◈ Contato</p>
+    <h2 class="section-title">Vamos trabalhar<br>juntos.</h2>
+    <p>Estou aberto a projetos freelance, colaborações e oportunidades CLT nas áreas de UX Writing, Copywriting e Conteúdo Educacional.</p>
+    <div class="contato-links">
+      <a href="mailto:joaohenriqueadasilva@gmail.com" class="contato-link">
+        <span class="contato-link-icon">✉</span>
+        joaohenriqueadasilva@gmail.com
+      </a>
+      <a href="tel:+5581999222733" class="contato-link">
+        <span class="contato-link-icon">☎</span>
+        (81) 99922-2733
+      </a>
+      <a href="https://linkedin.com/in/joaohenriquealves" class="contato-link" target="_blank">
+        <span class="contato-link-icon">in</span>
+        linkedin.com/in/joaohenriquealves
+      </a>
+    </div>
+  </div>
+  <div class="contato-right">
+    <p class="section-label">◈ Status</p>
+    <h3 class="section-title">Disponível<br>para projetos</h3>
+    <div class="disponivel">
+      <span class="dot-green"></span>
+      Aceitando novos clientes
+    </div>
+    <p style="margin-top: 2rem; font-size: 0.88rem; line-height: 1.75; color: rgba(245,240,232,0.55);">
+      Jaboatão dos Guararapes, PE · Brasil<br>
+      Atendimento remoto · Nacional e Internacional
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 — João Henrique Alves da Silva</p>
+  <p>UX Writing · Copywriting · Edtech</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
